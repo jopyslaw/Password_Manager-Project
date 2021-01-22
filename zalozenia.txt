@@ -1,0 +1,35 @@
+1. Nazwa aplikacji: Mened¾er haseˆ
+2. Funkcjonalno˜†: 
+    - logowanie oraz rejstracja u¾ytkownika
+    - zapis hasˆa do danego serwisu
+    - hasˆo sprawdzane przez wyra¾enia regularne pod wzgl©dem czy jest to bezpieczne hasˆo
+    - wy˜wietlenie wszystkich haseˆ dla u¾ytkownika aktualnie zalogowanego 
+    - mo¾liwo˜† modyfikacji i usuniecia danych w programie.
+    - zakonczenie dzialania
+    - menu logownaia i rejstracji
+    - menu akcji po zalogowaniu
+3. Backend aplikacji:
+    - zapis u¾ytkownik¢w do pliku users.txt gdzie znajduje si© ich nazwa u¾ytkownika oraz hasˆo. Program podczas dziaˆania ma czyta† linia po lini i sprawdza† czy dany uzytkownik istnieje.
+    - folder Users w kt¢rym ka¾dy uzytkownik b©dzie miaˆ zaˆo¾ony wˆasny plik .txt zgodnie ze wzorem   nazwa_uzytkownika.txt  tam zostan¥ zapisane nazwa witryny oraz hasˆa.
+    - zaimplementowa† sprawdzanie czy uzytkownik o danej nazwie_uzytkownika juz nie istnieje.
+4. Uzyte struktury:
+    - User:
+        - login;
+        - password;
+    - data:
+        - website_url;
+        - password;
+5. Funkcje:
+    - menu
+    - menu akcji uzytkownika
+    - dodanie uzytkownika
+    - logowanie uzytkownika
+    - zapis hasla do serwisu
+    - wyswietlanie wszystkich hasel
+    - modyfikacja danych w pliku z haslami
+    - usuniecie w pliku z haslami
+    - funkcja regex sprawdza czy w loginie nie ma spacji
+5.Biblioteki dodatkowe:
+    -regex.h
+6.Dodatkowe rzeczy:
+    - ogarn¥† operacje na plikach
