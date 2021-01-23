@@ -4,7 +4,7 @@
 #include <string.h>
 
 
-void main_menu(int choice, int *w_end, user user, user_data data)
+void main_menu(int choice, int *w_end, user user)
 {
     printf("Witaj w menedzerze hasel !!!\n");
     printf("Dostepne opcje:\n");
@@ -111,7 +111,7 @@ void login_menu(user user)
     {
         while(end != 0)
         {
-            user_menu(w_end);
+            user_menu(w_end, user);
         }
     }
     else
@@ -139,11 +139,10 @@ int check_login_data(user user)
     return 1; 
 }
 
-void user_menu(int *w_end)
+void user_menu(int *w_end, user user)
 {
-    int choice;
-    system("cls");
-    printf("Witaj w menu uzytkownika oto dostepne opcje:\n");
+    int choice, check;
+    printf("\nWitaj w menu uzytkownika oto dostepne opcje:\n");
     printf("1. Dodaj haslo\n");
     printf("2. Wyswietl hasla\n");
     printf("3. Wyloguj sie\n");
@@ -153,8 +152,18 @@ void user_menu(int *w_end)
     switch(choice)
     {
         case 1:
+            check = add_data(user);
+            if(check == 0)
+            {
+                printf("Dane zostaly dodane");
+            }
+            else
+            {
+                printf("Wystapil blad. Dane nie zostaly dodane");
+            }
             break;
         case 2:
+            show_data(user);
             break;
         case 3:
             *w_end = 0;
@@ -162,4 +171,60 @@ void user_menu(int *w_end)
         default:
             printf("Nie ma takiej opcji");
     }
+}
+
+int add_data(user user)
+{
+    user_data data;
+    char path[P_BUFF];
+    path_to_file(user, path);
+    if((file = fopen(path, "a")) == NULL)
+    {
+        printf("Blad z odczytem pliku");
+        return 1;
+    }
+    data = fill_user_data();
+    fprintf(file, "%s %s %s\n", data.website_url, data.url_login, data.url_password);
+    fclose(file);
+    return 0;
+}
+
+user_data fill_user_data()
+{
+    user_data data;
+    system("cls");
+    printf("Podaj nazwe strony: ");
+    scanf("%s", data.website_url);
+    printf("Podaj login: ");
+    scanf("%s", data.url_login);
+    printf("Podaj haslo: ");
+    scanf("%s", data.url_password);
+    return data;
+}
+
+void show_data(user user)
+{
+    char path[P_BUFF] = {0}, username[T_BUFF], password[T_BUFF], url[T_BUFF];
+    path_to_file(user, path);
+    if((file = fopen(path, "r")) == NULL)
+    {
+        printf("Blad dostepu do pliku");
+        return;
+    }
+    printf("URL\t LOGIN\t PASSWORD\n");
+    while(fscanf(file, "%s %s %s", url, username, password) != EOF)
+    {
+        printf("%s\t %s\t %s\n",url, username, password);
+    }
+    fclose(file);
+    return;
+}
+
+void path_to_file(user user, char *tab)
+{
+    strcat(tab,DATA_PATH);
+    strcat(tab,user.login);
+    strcat(tab,".txt");
+    tab++;
+    return;
 }
