@@ -3,7 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Napisac sprawdzanie wpisywanych danych czy w hasle nie ma znakow specjalnych lub dodac szyfrowanie 
 
+// Funkcja ktora sprawdza czy we wpisanym tekscie nie ma zakazanych znakow;
+
+// Ustawic maksymalna dlugosc hasla na 120 znakow tak samo jak i loginu
+
+// Do implementowac sprawdzanie poprawanosci znakow przy loginie i hasle
+
+// Glowne menu
 void main_menu(int choice, int *w_end, user user)
 {
     printf("Witaj w menedzerze hasel !!!\n");
@@ -31,17 +39,28 @@ void main_menu(int choice, int *w_end, user user)
     }
 }
 
+// Menu rejstracji
 void register_menu(user user)
 {
-    int check_register;
+    int check_register, check_login, check_password;
     system("cls");
     printf("Rejstracja nowego uzytkownika: \n");
-    printf("Podaj login: ");
-    scanf("%s", user.login);
-    fflush(stdin);
-    printf("Podaj haslo: ");
-    scanf("%s", user.password);
-    fflush(stdin);
+    printf("Pamietaj maksymalna dlugosc hasla i loginu to 120 znakow dla kazdego\n");
+    printf("Znaki ktore nie moga wystapic w nazwie uzytkownika to: spacja, dwukropki, cydzyslowia, |, ~, {, }\n");
+    printf("Znaki ktore nie moga wystapic w hasle to: |, ~, {, }\n");
+    while(strlen(user.login) > MAX_SIZE || strlen(user.password) > MAX_SIZE || strlen(user.login) == 0 || strlen(user.password) == 0)
+    {
+        printf("Podaj login: ");
+        scanf("%s", user.login);
+        fflush(stdin);
+        printf("Podaj haslo: ");
+        scanf("%s", user.password);
+        fflush(stdin);
+        if(strlen(user.login) > MAX_SIZE || strlen(user.password) > MAX_SIZE)
+        {
+            printf("Login lub haslo maja wiecej nic 120 znakow lub sa puste");
+        }
+    }
     check_register = register_user(user);
     if(check_register == 0)
     {
@@ -55,9 +74,11 @@ void register_menu(user user)
     }
 }
 
+// Funkcja odpowiadajaca za rejstracja uzytkownika 
 int register_user(user user)
 {
     int exist;
+    char enc_pass[T_BUFF];
     exist = user_exist(user);
     if(exist == 0)
     {
@@ -66,7 +87,9 @@ int register_user(user user)
             printf("Blad otwarcia pliku");
             return 1;
         }
-        fprintf(file, "%s %s\n", user.login, user.password);
+        strcpy(enc_pass, user.password);
+        password_encryption(enc_pass);
+        fprintf(file, "%s %s\n", user.login, user.password ); // user.password -> enc_pass
         fclose(file);
         return 0;
     }
@@ -76,7 +99,8 @@ int register_user(user user)
     }
 }
 
-int user_exist(user user)
+// Funkcja ktora sprawdza czy uzytkownik z dan¥ nazw¥ ju¾ istnieje
+int user_exist(user user) 
 {
     char user_tab[T_BUFF];
     if((file = fopen(USER_DATA, "r")) == NULL)
@@ -88,13 +112,16 @@ int user_exist(user user)
     {
         if( strcmp(user.login, user_tab) == 0)
         {
+            fclose(file);
             return 1;
         }
     }
+    fclose(file);
     return 0; 
         
 }
 
+// Menu logowania
 void login_menu(user user)
 {
     int check_data, end=1, *w_end = &end;
@@ -120,6 +147,7 @@ void login_menu(user user)
     }
 }
 
+// Funkcja sluzaca do logowania spawdzajaca czy haslo i login zgadzaja sie z tymi z bazy
 int check_login_data(user user)
 {
     char username[T_BUFF];
@@ -131,14 +159,18 @@ int check_login_data(user user)
     }
     while(fscanf(file,"%s %s",username, user_password) != EOF)
     {
+        //password_decryption(user_password); // Funkcja odpowiadajaca za dekodowania hasla
         if(strcmp(user.login, username)==0 && strcmp(user.password, user_password) == 0)
         {
+            fclose(file);
             return 0;
         }
     }
+    fclose(file);
     return 1; 
 }
 
+// Menu uzytkownika
 void user_menu(int *w_end, user user)
 {
     int choice, check;
@@ -173,6 +205,7 @@ void user_menu(int *w_end, user user)
     }
 }
 
+// Funkcja realizujaca dodawania hasla do bazy dla danego uzytkownika
 int add_data(user user)
 {
     user_data data;
@@ -189,6 +222,7 @@ int add_data(user user)
     return 0;
 }
 
+// Funkcja slu¾aca do wypeˆnienia struktury danych user_data
 user_data fill_user_data()
 {
     user_data data;
@@ -202,6 +236,7 @@ user_data fill_user_data()
     return data;
 }
 
+// Funkcja wyswietlajaca wszystkie hasla danego uzytkownika
 void show_data(user user)
 {
     char path[P_BUFF] = {0}, username[T_BUFF], password[T_BUFF], url[T_BUFF];
@@ -220,6 +255,7 @@ void show_data(user user)
     return;
 }
 
+// Funkcja tworzaca sciezke do pliku gdzie ma zostac zapisany plik
 void path_to_file(user user, char *tab)
 {
     strcat(tab,DATA_PATH);
@@ -227,4 +263,34 @@ void path_to_file(user user, char *tab)
     strcat(tab,".txt");
     tab++;
     return;
+}
+
+// Funkcja sprawdza czy w hasle nie wystepuja zabronione znaki
+int check_password_correct(char *tab)
+{
+    int i=0;
+    while(tab[i] != '\0')
+    {
+        if(tab[i] == 126 || tab[i] == 125 || tab[i] == 124 || tab[i] == 123)
+        {
+            return 1;
+        }
+        i++;
+    }
+    return 0;
+}
+
+// Funkcja sprawdza czy w loginie nie wystepuja zabronione znaki
+int check_login_correct(char *tab)
+{
+    int i=0;
+    while(tab[i] != '\0')
+    {
+        if(tab[i] == 126 || tab[i] == 125 || tab[i] == 124 || tab[i] == 123 || tab[i] == 32 || tab[i] == 58 || tab[i] == 34)
+        {
+            return 1;
+        }
+        i++;
+    }
+    return 0;
 }
