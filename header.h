@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #define BUFF 150
+#define LETTER_SHIFT 5
 #define T_BUFF (BUFF+1)
 #define P_BUFF (T_BUFF+13)
+#define MAX_SIZE 121
+#define MAX_GET 130
 #define USER_DATA "users.txt"
 #define DATA_PATH "UserData\\"
+#define DIR_NAME "UserData"
 
 FILE *file;
 
@@ -23,6 +26,10 @@ typedef struct User_data
 }user_data;
 
 // Menu
+int create_file();
+
+int create_directory();
+
 void main_menu(int choice, int *w_end, user user);
 
 void register_menu(user user);
@@ -44,3 +51,13 @@ user_data fill_user_data();
 void show_data(user user);
 
 void path_to_file(user user, char *tab);
+
+void password_encryption(char *tab);
+
+void password_decryption(char *tab);
+
+int check_password_correct(char *tab);
+
+int check_login_correct(char *tab);
+
+
