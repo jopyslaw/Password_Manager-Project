@@ -3,21 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/types.h>
-
-// Napisac sprawdzanie wpisywanych danych czy w hasle nie ma znakow specjalnych lub dodac szyfrowanie 
-
-// Funkcja ktora sprawdza czy we wpisanym tekscie nie ma zakazanych znakow;
-
-// Ustawic maksymalna dlugosc hasla na 120 znakow tak samo jak i loginu
-
-// Do implementowac sprawdzanie poprawanosci znakow przy loginie i hasle
-
-// Funkcja mkdir do ogarni©cia
-
-// Funkcja tworz¥ca plik user.txt
-
-// Doda† kolorow¥ skˆadnie
 
 
 // Funkcja odpowiadajaca za rejstracja uzytkownika 
@@ -25,19 +10,16 @@ int register_user(user user)
 {
     int exist;
     char enc_pass[T_BUFF];
-    create_file();
-    create_directory();
     exist = user_exist(user);
     if(exist == 0)
     {
         if((file = fopen(USER_DATA, "a")) == NULL)
         {
-            //printf("Blad otwarcia pliku");
             return 1;
         }
         strcpy(enc_pass, user.password);
         password_encryption(enc_pass);
-        fprintf(file, "%s %s\n", user.login, enc_pass); // user.password -> enc_pass
+        fprintf(file, "%s %s\n", user.login, enc_pass);
         fclose(file);
         return 0;
     }
@@ -53,8 +35,7 @@ int user_exist(user user)
     char user_tab[T_BUFF];
     if((file = fopen(USER_DATA, "r")) == NULL)
     {
-        //printf("Blad otwarcia pliku");
-        return 1;
+        return 1; //Blad otwarcia pliku
     }
     while (fscanf(file,"%s %*s",user_tab)==1)
     {
@@ -76,8 +57,7 @@ int check_login_data(user user)
     char user_password[T_BUFF];
     if((file = fopen(USER_DATA, "r")) == NULL)
     {
-        //printf("Blad otwarcia pliku");
-        return 1;
+        return 1; //Blad otwarcia pliku
     }
     while(fscanf(file,"%s %s",username, user_password) != EOF)
     {
@@ -101,8 +81,7 @@ int add_data(user user)
     path_to_file(user, path);
     if((file = fopen(path, "a")) == NULL)
     {
-        //printf("Blad z odczytem pliku");
-        return 1;
+        return 1; //Blad otwarcia pliku
     }
     data = fill_user_data();
     password_encryption(data.url_password);
@@ -135,8 +114,7 @@ void show_data(user user)
     path_to_file(user, path);
     if((file = fopen(path, "r")) == NULL)
     {
-        //printf("Blad dostepu do pliku");
-        return;
+        return; //Blad otwarcia pliku
     }
     printf("URL\tLOGIN\tPASSWORD\n");
     while(fscanf(file, "%s %s %s", url, username, password) != EOF)
