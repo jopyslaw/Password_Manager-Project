@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define BUFF 150
-#define LETTER_SHIFT 5
-#define T_BUFF (BUFF+1)
-#define P_BUFF (T_BUFF+13)
-#define MAX_SIZE 121
-#define MAX_GET 130
-#define USER_DATA "users.txt"
-#define DATA_PATH "UserData\\"
-#define DIR_NAME "UserData"
+#define BUFF 150 // Staˆa bufora danych
+#define LETTER_SHIFT 5 // Staˆe przesuni©cie przy kodowaniu hasˆa
+#define T_BUFF (BUFF+1) // Staˆa dˆugo˜ci tekstu + miejsce na znak konca stringa '\0'
+#define P_BUFF (T_BUFF+13) // Staˆa dˆugo˜ci do sciezki ktora jest generowana automatycznie
+#define MAX_SIZE 121 // maksymalna dlugosc hasla ze znakiem konca stringa '\0'
+//#define MAX_GET 130 miaˆo byc uzyte przy scanfach zeby miozna byˆo tylko 130 znak¢w wprowadzi†
+#define USER_DATA "users.txt" // Nazwa pliku gdzie przechowywane sa dane logowania uzytkownikow zarejstrowanych
+#define DATA_PATH "UserData\\" // Sciezka do zapisu plikow z danymi uzytkownikow
+#define DIR_NAME "UserData" // Nazwa folderu do zapisu danych uzytkownikow
 
 FILE *file;
 

@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 // Funkcja do szyfrowania hasla
-void password_encryption(char *tab) // DO sprawdzenia
+void password_encryption(char *tab)
 {
     for(int i=0; *(tab+i) != '\0'; i++)
     {
@@ -35,7 +35,7 @@ void password_encryption(char *tab) // DO sprawdzenia
 }
 
 // Funkcja do odszyfrowania hasla
-void password_decryption(char *tab) // Do sprawdzenia
+void password_decryption(char *tab)
 {
     for(int i=0; *(tab+i) != '\0'; i++)
     {
